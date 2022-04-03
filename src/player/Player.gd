@@ -1,51 +1,40 @@
 extends KinematicBody2D
 
-var motion = Vector2(0,0)
+var velocity = Vector2.ZERO
 #managing constants here
-const SPEED = 450
-const GRAVITY = 100
-const UP = Vector2(0,-1)
-const JUMP_SPEED = 1500
+const MAX_SPEED = 140
+const MAX_ACCEL = 800
+const FRICTION = 400
+const GRAVITY = 600
+const MAX_FALL_SPEED = 200
+const JUMP_SPEED = 60*230
 
-signal animate
+onready var animationPlayer = $AnimationPlayer
 
 func _physics_process(delta):
-	apply_gravity()
-	jump()
-	move()
+	move(delta)
+	jump(delta)
 	animation()
-	crouch()
-	move_and_slide(motion, UP)
+	velocity = move_and_slide(velocity, Vector2.UP)
 
+func jump(delta):
+	if Input.is_action_just_pressed('jump') and is_on_floor():
+		velocity += Vector2.UP * JUMP_SPEED * delta
+
+func move(delta): 
+	var input = sign(Input.get_action_strength("right") - Input.get_action_strength("left"))
+	velocity.x = move_toward(velocity.x, MAX_SPEED*input, delta*MAX_ACCEL)
+	velocity.y = move_toward(velocity.y, MAX_FALL_SPEED, delta*GRAVITY)
 
 func crouch():
 	pass
 
-
-func jump():
-	if Input.is_action_pressed('jump') and is_on_floor():
-		motion.y -= JUMP_SPEED
-
-
-func move(): 
-	if Input.is_action_pressed('left') and not Input.is_action_pressed('right') :	
-		motion.x = -SPEED
-	elif Input.is_action_pressed('right') and not Input.is_action_pressed('left'):
-		motion.x = SPEED
-	else:
-		motion.x = 0
-
-
-func apply_gravity():
-	if is_on_floor():
-		motion.y = 0
-	elif is_on_ceiling():
-		motion.y = 1
-	else:
-		motion.y += GRAVITY
-		pass
-
-
 func animation():
-	emit_signal("animate",motion)
+	if not is_on_floor():
+		animationPlayer.play("jump")
+	elif velocity.x != 0 :
+		animationPlayer.play("run")
+		animationPlayer.flip_h = velocity.x < 0
+	else:
+		animationPlayer.play("idle")
 
