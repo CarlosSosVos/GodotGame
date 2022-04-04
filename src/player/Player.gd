@@ -24,15 +24,12 @@ func _physics_process(delta):
 
 func jump(delta):
     if Input.is_action_just_pressed('jump') and is_on_floor():
-        print(velocity)
         velocity += Vector2.UP * JUMP_SPEED * delta  # Da un impulso de GRAVITY/FPS - JS/FPS = I
-        print(velocity)
 
 func move(delta): 
     var input = sign(Input.get_action_strength("right") - Input.get_action_strength("left"))
     velocity.x = move_toward(velocity.x, MAX_SPEED*input, delta*ACCELERATION)
     velocity.y = move_toward(velocity.y, MAX_FALL_SPEED, delta*GRAVITY)
-    print(velocity)
 
 func crouch():
     pass
