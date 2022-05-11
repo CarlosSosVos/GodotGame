@@ -5,5 +5,5 @@ Assets used for placeholders:
 - https://rvros.itch.io/animated-pixel-hero
 - https://o-lobster.itch.io/platformmetroidvania-pixel-art-asset-pack
 
-# Parámetros del juego
+# Game Parameters
 - Tilemap size: 16 x 16 pixels
