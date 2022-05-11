@@ -99,6 +99,6 @@ smoothing_enabled = true
 [node name="AnimationPlayer" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -1.5 )
 frames = SubResource( 16 )
-animation = "jump"
-frame = 5
+animation = "idle"
+frame = 3
 playing = true
